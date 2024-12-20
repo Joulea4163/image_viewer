@@ -19,7 +19,7 @@ class util_window():
             else:
                 print("don't exist")
         except Exception as ex:
-            print(ex)
+            print("Error", str(ex))
         finally:
             img=image.resize((width,height))
             icon=local.ImageTk.PhotoImage(img)
