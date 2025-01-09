@@ -33,3 +33,4 @@ _icon_test_canva = ""
 
 
 validated_user = "nose"
+validated_user = "admin"
