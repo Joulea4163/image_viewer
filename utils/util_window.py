@@ -11,19 +11,23 @@ class util_window():
     def window_title(self,window: CTk, state_title: bool=True):
         window.title("")
 
-    def generate_icon(self,path_icon:str, width: int =25, height: int =25):
+    def generate_icon(self,path_icon:str, width: int =25, height: int =25, color:str =None):
         try:
-            if os.path.exists(path_icon):
-                image = local.Image.open(path_icon)
-
-            else:
-                print("don't exist")
-        except Exception as ex:
-            print("Error", str(ex))
-        finally:
-            img=image.resize((width,height))
-            icon=local.ImageTk.PhotoImage(img)
-            return icon
+            if os.path.exists(path_icon): #verificar si existe el icono/imagen en la ruta
+                image = local.Image.open(path_icon) #abrir la imagen
+            else: #si no existe el icono/imagen
+                return local._icon_default #usar el icono default
+        except:
+            try:
+                if color == None:
+                    color = "#ffffff"
+                image = local.Image.new("RGB",(1000,1000),color) #crear una imagen nueva
+            except:
+                image = local.Image.open(local.os.path.join("asset","icon","default","none.png"))
+        img=image.resize((width,height))
+        icon=local.ImageTk.PhotoImage(img)
+        return icon
+            
 
     def clear_window(self, window:CTk | local.CTkToplevel | local.CTkFrame):
         for widget in window.winfo_children():
@@ -44,14 +48,13 @@ class util_window():
            return local.ImageTk.PhotoImage(img)
         path_icons = local.os.path.join("./asset", "icon")
         icon_path =  local.os.path.join(path_icons, "window", "icon_window.ico")
-        
-        self.iconbitmap(icon_path)
-        icon = generate_icon(local.os.path.join(path_icons, "icon_window.png"))
-        self.iconphoto(False, icon)
+        if os.path.exists(icon_path):
+            self.iconbitmap(icon_path)
+        if os.path.exists(os.path.join(path_icons, "icon_window.png")):
+            icon = generate_icon(local.os.path.join(path_icons, "icon_window.png"))
+            self.iconphoto(False, icon)
 
+        local._icon_default = util_window.generate_icon(self,local.os.path.join(path_icons,"default","none.png"))
         local._icon_btn_start = util_window.generate_icon(self,local.os.path.join(path_icons,"icon_btn_start.png"))
         local._icon_btn_cancel = util_window.generate_icon(self,local.os.path.join(path_icons,"icon_btn_cancel.png"))
         local._photo_lobby = util_window.generate_icon(self,local.os.path.join(path_icons,"image","ImageTest.png"),300,200)
-        #image = Image.open(ShowImage)
-
-        local._icon_test_canva = ImageTk.PhotoImage(file="./asset/icon/image/imageTest.png")
