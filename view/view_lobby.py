@@ -40,13 +40,13 @@ class LobbyView:
         archive_options.add_option("exit", command=self.on_close)
   
     def open_images(self):
-        path = filedialog.askopenfilenames(filetypes=[("image","*.png*" ), ("image","*.jpg*")])
+        path = filedialog.askopenfilenames(filetypes=local._extensions_list)
         #AnotherWindow(self.container,path)
         new_view = CTkToplevel(self.root)
         AnotherWindow(new_view,path)
 
     def create_image_view(self):
-        path = filedialog.askopenfilenames(filetypes=[("image","*.png*")])
+        path = filedialog.askopenfilenames(filetypes=local._extensions_list)
         new_view = CTkToplevel(self.root)
         AnotherWindow(new_view,path)
 

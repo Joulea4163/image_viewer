@@ -13,6 +13,7 @@ from utils.util_data import util_data
 project_version = "0.6.0.0-beta"
 validated_user = "nose"
 
+_extensions_list = [("image","*.png*" ), ("image","*.jpg*"), ("image","*.ico*"), ("image","*.icns*"), ("image","*.gif*"), ("image","*.webP*"), ("image","*.PPM*")]
 _icon_default =""
 _photo_lobby = ""
 _icon_window = ""

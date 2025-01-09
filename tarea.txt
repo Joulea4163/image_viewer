@@ -13,12 +13,13 @@ hecho:
     crear una ventana para visualizar imagenes, tiene que tener la capacidad de Cambiar entre imagenes y zoom (o escala).(+0.1)
     tomar en cuenta el tamaño inicial de la imagen. (+0.1)
     mejorar la exepciones de la funcion "generate_icon". (+0.1)
+    mejorar la vista de imagenes para que pueda actualizar la pocision de la imagen segun se cambie el tamaño de la ventana. (+0.1)
 
 en proceso:
 
 pendiente:
     tener la capacidad de imprimir un documento "pdf" a la impresora seleccionada.(+0.1)
     tener la capacidad de hacer un reporte.(+0.1)
-    mejorar la vista de imagenes para que pueda actualizar la pocision de la imagen segun se cambie el tamaño de la ventana. (+0.1)
     mejorar la vista de imagenes para que pueda mostrar la imagen en un tamaño determinado. (+0.1)
     investigar sobre la aplicacion "sumastraPDFPortatil" para poder imprimir documentos desde python. (+0.1)
+    investigar sobre la aplicacion "pdfkit" para poder imprimir documentos desde python. (+0,1)
