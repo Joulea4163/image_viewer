@@ -17,7 +17,9 @@ hecho:
     mejorar la vista de imagenes para que pueda mostrar la imagen en un tamaño determinado. (+0.1)
 
 en proceso:
-    
+    convertir pdf a imagen con "fitz"(+0.1)
+    generar folders temporales en la carpeta "temp" para guardar imagenes y archivos temporales. (+0.0.1)
+
 
 pendiente:
     tener la capacidad de imprimir un documento "pdf" a la impresora seleccionada.(+0.1)

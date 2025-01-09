@@ -10,8 +10,17 @@ from utils.util_window import util_window
 from utils.util_function import util_function
 from utils.util_data import util_data
 
-project_version = "0.6.0.0-beta"
-validated_user = "nose"
+import fitz
+from PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
+
+project_name = "App_View_image"
+project_version = "0.9.0.0"
+
+app_path_temp = ""
+app_path_temp_view = ""
+app_path_temp_log = ""
+app_path_temp_log_txt = ""
+
 
 _extensions_list = [("image","*.png*" ), ("image","*.jpg*"), ("image","*.ico*"), ("image","*.icns*"), ("image","*.gif*"), ("image","*.webP*"), ("image","*.PPM*")]
 _icon_default =""
@@ -23,3 +32,4 @@ _icon_test_canva = ""
 
 
 
+validated_user = "nose"
