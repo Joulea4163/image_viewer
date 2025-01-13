@@ -14,7 +14,7 @@ import fitz
 from PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
 
 project_name = "App_View_image"
-project_version = "0.9.0.0"
+project_version = "0.8.1.1"
 
 app_path_temp = ""
 app_path_temp_view = ""

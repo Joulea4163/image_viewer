@@ -14,7 +14,8 @@ hecho:
     tomar en cuenta el tamaño inicial de la imagen. (+0.1)
     mejorar la exepciones de la funcion "generate_icon". (+0.1)
     mejorar la vista de imagenes para que pueda actualizar la pocision de la imagen segun se cambie el tamaño de la ventana. (+0.1)
-    mejorar la vista de imagenes para que pueda mostrar la imagen en un tamaño determinado. (+0.1)
+    mejorar la vista de imagenes para que pueda mostrar la imagen en un tamaño determinado. (+0.0.1)
+    crearun usuario y contraseña para el login "admin". (+0.0.0.1)
 
 en proceso:
     convertir pdf a imagen con "fitz"(+0.1)
