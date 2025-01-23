@@ -143,13 +143,14 @@ class AnotherWindow:
             font=("Arial", 12),
             width=60
         ).pack(fill="x",side=LEFT,padx=(5,0))
+        
         self.frame_top.pack_forget()
         self.frame_bottom = CTkFrame(self.root,bg_color= "#256CA9" ,border_width=0,fg_color= "#256CA9",corner_radius=0,height=25)
         self.frame_bottom.pack(fill="x",side=BOTTOM,pady=(0,0),expand=True)
 
         CTkButton(
             master=self.frame_bottom,
-            text="<-",
+            image=local._icon_btn_left,
             command=self.last_img,
             font=("Arial", 12),
             width=100
@@ -157,7 +158,7 @@ class AnotherWindow:
 
         CTkButton(
             master=self.frame_bottom,
-            text="->",
+            image=local._icon_btn_right,
             command=self.next_img,
             font=("Arial", 12),
             width=100
@@ -165,7 +166,7 @@ class AnotherWindow:
 
         CTkButton(
             master=self.frame_bottom,
-            text="+",
+            image=local._icon_btn_zoom_in,
             command=self.zoom_in,
             font=("Arial", 12),
             width=40
@@ -173,7 +174,7 @@ class AnotherWindow:
 
         CTkButton(
             master=self.frame_bottom,
-            text="-",
+            image=local._icon_btn_zoom_out,
             command=self.zoom_out,
             font=("Arial", 12),
             width=40
@@ -182,12 +183,13 @@ class AnotherWindow:
         self.label_page_number_total=CTkLabel(self.frame_bottom,
             text="de 0 pag"
             )
-        self.label_page_number_total.pack(fill="x",side=RIGHT,padx=(0,10))
 
+        self.label_page_number_total.pack(fill="x",side=RIGHT,padx=(0,10))
         self.txt_number_page=CTkEntry(self.frame_bottom,
             width=60,
             textvariable=self.model_page_actual
             )
+
         self.txt_number_page.pack(fill="x",side=RIGHT,padx=(0,10))
         self.txt_number_page.bind("<Return>",self.set_number_pages)
 

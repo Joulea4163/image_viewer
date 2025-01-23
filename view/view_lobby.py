@@ -33,11 +33,11 @@ class LobbyView:
         
         menu= frame_top.add_cascade(text="archive")
         archive_options = CustomDropdownMenu(widget=menu, corner_radius = 10)
-        archive_options.add_option("new", command=self.create_image_view)
-        archive_options.add_option("open",command=self.open_images)
-        archive_options.add_option("save")
-        archive_options.add_option("logout",command=lambda : ViewLogin(self.root))
-        archive_options.add_option("exit", command=self.on_close)
+        archive_options.add_option("new",local._icon_btn_new,command=self.create_image_view)
+        archive_options.add_option("open",local._icon_btn_open,command=self.open_images)
+        archive_options.add_option("save",local._icon_btn_save)
+        archive_options.add_option("logout",local._icon_btn_logout,command=lambda : ViewLogin(self.root))
+        archive_options.add_option("exit",local._icon_btn_exit,command=self.on_close)
   
     def open_images(self):
         path = filedialog.askopenfilenames(filetypes=local._extensions_list)
