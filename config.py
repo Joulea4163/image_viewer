@@ -14,7 +14,7 @@ import fitz
 from PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
 
 project_name = "App_View_image"
-project_version = "0.8.1.1"
+project_version = "0.8.1.2"
 
 app_path_temp = ""
 app_path_temp_view = ""
@@ -30,15 +30,14 @@ _icon_btn_start = ""
 _icon_btn_cancel = ""
 _icon_btn_left = ""
 _icon_btn_right = ""
-_icon_btn_zoom_in = ""
-_icon_btn_zoom_out = ""
+_icon_btn_zoomin = ""
+_icon_btn_zoomout = ""
 _icon_btn_logout = ""
 _icon_btn_new = ""
 _icon_btn_open = ""
 _icon_btn_save = ""
 _icon_btn_exit = ""
 _icon_test_canva = ""
-
 
 
 validated_user = "nose"

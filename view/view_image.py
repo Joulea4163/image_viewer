@@ -56,7 +56,7 @@ class AnotherWindow:
             pass
 
         elif isinstance(path, tuple):
-            self.List_img=[ruta  for ruta in path if os.path.exists(ruta)]
+            self.List_img=[route  for route in path if os.path.exists(route)]
             self.page_number_total=len(self.List_img)
             self.label_page_number_total.configure(text=f"de {self.page_number_total} pag.")
             self.show_image()
@@ -64,12 +64,15 @@ class AnotherWindow:
     def update_image(self, event=None):
         self.show_image()
 
+    def print_event(self):
+        pass
+
     def zoom_in(self):
         if self.scale<= self.limit_max_scale:
             self.scale= self.scale+0.1
             self.show_image()
 
-    def zoom_out(self):
+    def zoomout(self):
         if self.scale>=self.limit_min_scale:
             self.scale=self.scale-0.1
             self.show_image()
@@ -129,7 +132,6 @@ class AnotherWindow:
             image=local._icon_btn_start,
             compound="left",
             text="Save",
-            #command=self.log_in,
             font=("Arial", 12),
             width=60
         ).pack(fill="x",side=LEFT,padx=(10,5))
@@ -139,7 +141,7 @@ class AnotherWindow:
             image=local._icon_btn_cancel,
             compound="left",
             text="Print",
-            #command=self.exit_event,
+            command=self.print_event,
             font=("Arial", 12),
             width=60
         ).pack(fill="x",side=LEFT,padx=(5,0))
@@ -152,6 +154,7 @@ class AnotherWindow:
             master=self.frame_bottom,
             image=local._icon_btn_left,
             command=self.last_img,
+            text="",
             font=("Arial", 12),
             width=100
         ).pack(fill="x",side=LEFT,padx=(10,0),expand=True)
@@ -160,22 +163,25 @@ class AnotherWindow:
             master=self.frame_bottom,
             image=local._icon_btn_right,
             command=self.next_img,
+            text="",
             font=("Arial", 12),
             width=100
         ).pack(fill="x",side=RIGHT,padx=(0,10),expand=True)
 
         CTkButton(
             master=self.frame_bottom,
-            image=local._icon_btn_zoom_in,
+            image=local._icon_btn_zoomin,
             command=self.zoom_in,
+            text="",
             font=("Arial", 12),
             width=40
         ).pack(fill="x",side=RIGHT,padx=(0,5))
 
         CTkButton(
             master=self.frame_bottom,
-            image=local._icon_btn_zoom_out,
-            command=self.zoom_out,
+            image=local._icon_btn_zoomout,
+            command=self.zoomout,
+            text="",
             font=("Arial", 12),
             width=40
         ).pack(fill="x",side=RIGHT,padx=(5,2))

@@ -6,7 +6,7 @@ class util_consult:
         try:
             if user == "nose" and  password == "1234":
                 return True
-            elif user == "admin" and password == "1234":
+            elif user == "admin" and password == "4321":
                 return True
             else:
                 return False
