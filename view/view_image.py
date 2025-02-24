@@ -5,7 +5,7 @@ class AnotherWindow:
     def __init__(self,root:CTk | CTkFrame | CTkToplevel,path_image:str | list | tuple=""):
         self.root = root
         util_window.clear_window(self,self.root)
-        width, height = 900,600
+        width, height = 1000,650
         self.root.maxsize(width,height)
         self.root.geometry(f"{width}x{height-55}-7+0")
         self.load_resources()
@@ -65,7 +65,8 @@ class AnotherWindow:
         self.show_image()
 
     def print_event(self):
-        pass
+        print(self.List_img[0])
+        os.startfile(self.List_img[0], "print")
 
     def zoom_in(self):
         if self.scale<= self.limit_max_scale:
@@ -125,28 +126,27 @@ class AnotherWindow:
 
     def show_visor(self):
         self.frame_top = CTkFrame(self.root,bg_color= "#256CA9",fg_color= "#256CA9",corner_radius=0,height=25,border_width=0)
-        self.frame_top.pack(fill="x")
+        self.frame_top.pack(fill="x",side=TOP,pady=(0,0),expand=True)
 
         CTkButton(
             master=self.frame_top,
-            image=local._icon_btn_start,
+            image=local._icon_btn_save,
             compound="left",
             text="Save",
             font=("Arial", 12),
             width=60
-        ).pack(fill="x",side=LEFT,padx=(10,5))
+        ).pack(fill="x",side=RIGHT,padx=(0,5))
 
         CTkButton(
             master=self.frame_top,
-            image=local._icon_btn_cancel,
-            compound="left",
+            image=local._icon_btn_print,
+            compound="right",
             text="Print",
             command=self.print_event,
             font=("Arial", 12),
             width=60
         ).pack(fill="x",side=LEFT,padx=(5,0))
         
-        self.frame_top.pack_forget()
         self.frame_bottom = CTkFrame(self.root,bg_color= "#256CA9" ,border_width=0,fg_color= "#256CA9",corner_radius=0,height=25)
         self.frame_bottom.pack(fill="x",side=BOTTOM,pady=(0,0),expand=True)
 
@@ -211,10 +211,10 @@ class AnotherWindow:
         self.Image_container.update()
         self.Image_container.bind("<Left>",self.y_MouseSheet)
         self.Image_container.bind("<Right>",self.x_MouseSheet)
-        self.Image_container.bind("<Configure>", self.update_image)
-        self.Image_container.bind("<MouseWheel>",self.y_MouseSheet)
         self.Image_container.bind("<Control-Left>",self.last_img)
         self.Image_container.bind("<Control-Right>",self.next_img)
+        self.Image_container.bind("<Configure>", self.update_image)
+        self.Image_container.bind("<MouseWheel>",self.y_MouseSheet)
         self.Image_container.configure(yscrollcommand=self.scrolly.set)
         self.Image_container.configure(xscrollcommand=self.scrollx.set)
         self.Image_container.bind("<Shift-MouseWheel>",self.x_MouseSheet)
