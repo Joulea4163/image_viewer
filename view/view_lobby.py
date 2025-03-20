@@ -5,7 +5,7 @@ from view.view_login import ViewLogin
 from tkinter import filedialog
 
 class LobbyView:
-    def __init__(self,root: CTkToplevel | CTk):
+    def __init__(self,root: CTkToplevel|CTk):
         self.root=root
         self.main_root=root
         util_window.clear_window(self,self.root)
