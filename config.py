@@ -9,7 +9,7 @@ from utils.util_consult import util_consult
 from utils.util_window import util_window
 from utils.util_function import util_function
 import fitz
-import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 from PyPDF2 import PdfFileReader,PdfFileWriter,PdfFileMerger
 
 project_name="App_View_image"
