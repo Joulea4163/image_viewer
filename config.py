@@ -21,7 +21,7 @@ app_path_temp_log=""
 app_path_temp_log_txt=""
 
 
-_extensions_list=[("image","*.png*" ),("image","*.jpg*"),("image","*.ico*"),("image","*.icns*"),("image","*.gif*"),("image","*.webP*"),("image","*.PPM*")]
+_extensions_list=[("PDF","*.pdf*"),("image","*.png*" ),("image","*.jpg*"),("image","*.ico*"),("image","*.icns*"),("image","*.gif*"),("image","*.webP*"),("image","*.PPM*")]
 _icon_default =""
 _photo_lobby=""
 _icon_window=""

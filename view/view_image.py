@@ -9,13 +9,32 @@ class AnotherWindow:
         self.root.maxsize(width,height)
         self.root.geometry(f"{width}x{height-55}-7+0")
         self.load_resources()
-        self.show_visor()
-        self.check_file(path_image)
+        _status_continue = True
+        if len(path_image) <= 1:
+            if isinstance(path_image[0], str):
+                _name , _extention =os.path.splitext(os.path.basename(path_image[0]))
+                if _extention == ".pdf":
+                    _sub_list_img = self.pdf_to_img(path_image[0],_name)
+                    if not _sub_list_img[0] == None:
+                       path_image = _sub_list_img
+                    else:
+                        _status_continue = False
+                        alert = mbox(master=self.root,
+                        title="Warning",
+                        icon="warning",
+                        message=f"{_sub_list_img[1]}", option_1="ok")
+                        if alert.get() == "ok":
+                            pass
+        if  _status_continue:
+            self.show_visor()
+            self.check_file(path_image)
+        else:
+            root.destroy()
 
     def load_resources(self):
         self.List_img=[]
         self.scale=1.0
-        self.page_number=0
+        self.page_number=0  
         self.page_number_total=0
         self.model_page_actual=StringVar() 
         self.limit_max_scale=3.0
@@ -54,10 +73,7 @@ class AnotherWindow:
                 self.label_page_number_total.configure(text=f"de {self.page_number_total} pag.")
                 self.show_image()
 
-        elif isinstance(path,list):
-            pass
-
-        elif isinstance(path,tuple):
+        elif isinstance(path,list) or isinstance(path,tuple):
             self.List_img=[route  for route in path if os.path.exists(route)]
             self.page_number_total=len(self.List_img)
             self.label_page_number_total.configure(text=f"de {self.page_number_total} pag.")
@@ -71,9 +87,9 @@ class AnotherWindow:
             def process_page(page_number):
                 #util_window.modify_bar_msg(self.prog_bar_label, f"please wait... \nGenerating page information. {self.page_number+1}")
                 page=document.load_page(page_number)
-                pix=page.get_pixmap(matrix=fitz.matrix(2,2))
+                pix=page.get_pixmap(matrix=fitz.Matrix(2,2))
                 img=Image.frombytes("RGB",[pix.width, pix.height],pix.samples)
-                image_ubication=os.path.join(self.path_temp_local, f"{name_document}{page_number+1}.png")
+                image_ubication=os.path.join('C:/tem_image', f"{name_document}{page_number+1}.png")
                 img.save(image_ubication)
                 return image_ubication
             with ThreadPoolExecutor() as executor:
@@ -128,12 +144,14 @@ class AnotherWindow:
             self.Image_container.yview_scroll(int(-1*(event.delta/120)),"units")
 
     def next_img(self):
-        self.page_number=(self.page_number+1)% len(self.List_img)
-        self.show_image()
+        if not self.page_number==[0]:
+            self.page_number=(self.page_number+1)% len(self.List_img)
+            self.show_image()
 
     def last_img(self):
-        self.page_number=(self.page_number-1)% len(self.List_img)
-        self.show_image()
+        if not self.page_number==[0]:
+            self.page_number=(self.page_number-1)% len(self.List_img)
+            self.show_image()
 
     def set_number_pages(self,event=None):
         try:

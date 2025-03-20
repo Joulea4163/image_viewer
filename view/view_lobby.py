@@ -41,13 +41,15 @@ class LobbyView:
 
     def open_images(self):
         path=filedialog.askopenfilenames(filetypes=local._extensions_list)
-        new_view=CTkToplevel(self.root)
-        AnotherWindow(new_view,path)
+        if not path == []:
+            new_view=CTkToplevel(self.root)
+            AnotherWindow(new_view,path)
 
     def create_image_view(self):
         path=filedialog.askopenfilenames(filetypes=local._extensions_list)
-        new_view=CTkToplevel(self.root)
-        AnotherWindow(new_view,path)
+        if not path == []:
+            new_view=CTkToplevel(self.root)
+            AnotherWindow(new_view,path)
 
     def on_close(self):
         self.main_root.deiconify()
