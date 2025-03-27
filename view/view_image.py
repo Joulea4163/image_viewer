@@ -5,7 +5,7 @@ class AnotherWindow:
     def __init__(self,root:CTk|CTkFrame|CTkToplevel,path_image:str|list|tuple=""):
         self.root=root
         util_window.clear_window(self,self.root)
-        width,height=1000,650
+        width,height=1000,750
         self.root.maxsize(width,height)
         self.root.geometry(f"{width}x{height-55}-7+0")
         self.load_resources()
