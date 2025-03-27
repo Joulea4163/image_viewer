@@ -89,7 +89,7 @@ class AnotherWindow:
                 page=document.load_page(page_number)
                 pix=page.get_pixmap(matrix=fitz.Matrix(2,2))
                 img=Image.frombytes("RGB",[pix.width, pix.height],pix.samples)
-                image_ubication=os.path.join('C:/tem_image', f"{name_document}{page_number+1}.png")
+                image_ubication=os.path.join('C:/temp_image', f"{name_document}{page_number+1}.png")
                 img.save(image_ubication)
                 return image_ubication
             with ThreadPoolExecutor() as executor:
@@ -107,11 +107,25 @@ class AnotherWindow:
     def update_image(self,event=None):
         self.show_image()
 
+    def print_pdf(pdf_path, printer_name):
+        sumatra_path = r"C:\Users\joule\OneDrive\Desktop\practica\image_viewer\SumatraPDF-3.5.2-64.exe"
+        command = [sumatra_path, "-print-to", printer_name, pdf_path]
+
+        try:
+            subprocess.run(command, check=True)
+            print("Print job sent successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Error printing file: {e}")
+
+    pdf_file = r"C:\Users\joule\OneDrive\Desktop\practica\image_viewer\asset\icon\pdf\test_pdf.pdf"
+    printer = "Microsoft print to PDF"
+    print_pdf(pdf_file, printer)
+
     def print_event(self):
         print(self.List_img[0])
         os.startfile(self.List_img[0],"print")
 
-    def zoom_in(self):
+    def zoomin(self):
         if self.scale<=self.limit_max_scale:
             self.scale=self.scale+0.1
             self.show_image()
@@ -217,7 +231,7 @@ class AnotherWindow:
         CTkButton(
             master=self.frame_bottom,
             image=local._icon_btn_zoomin,
-            command=self.zoom_in,
+            command=self.zoomin,
             text="",
             font=("Arial",12),
             width=40
