@@ -2,30 +2,28 @@ from config import *
 import config as local
 
 class AnotherWindow:
-    def __init__(self,root:CTk|CTkFrame|CTkToplevel,path_image:str|list|tuple=""):
-        self.root=root
-        util_window.clear_window(self,self.root)
-        width,height=1000,750
-        self.root.maxsize(width,height)
+    def __init__(self, root, path_image=""):
+        self.root = root
+        util_window.clear_window(self, self.root)
+        width, height = 1000, 750
+        self.root.maxsize(width, height)
         self.root.geometry(f"{width}x{height-55}-7+0")
         self.load_resources()
         _status_continue = True
         if len(path_image) <= 1:
             if isinstance(path_image[0], str):
-                _name , _extention =os.path.splitext(os.path.basename(path_image[0]))
+                _name, _extention = os.path.splitext(os.path.basename(path_image[0]))
                 if _extention == ".pdf":
-                    _sub_list_img = self.pdf_to_img(path_image[0],_name)
-                    if not _sub_list_img[0] == None:
-                       path_image = _sub_list_img
+                    _sub_list_img = self.pdf_to_img(path_image[0], _name)
+                    if _sub_list_img[0] is not None:
+                        path_image = _sub_list_img
                     else:
                         _status_continue = False
-                        alert = mbox(master=self.root,
-                        title="Warning",
-                        icon="warning",
-                        message=f"{_sub_list_img[1]}", option_1="ok")
+                        alert = mbox(master=self.root, title="Warning", icon="warning",
+                                     message=f"{_sub_list_img[1]}", option_1="ok")
                         if alert.get() == "ok":
                             pass
-        if  _status_continue:
+        if _status_continue:
             self.show_visor()
             self.check_file(path_image)
         else:
@@ -79,47 +77,52 @@ class AnotherWindow:
             self.label_page_number_total.configure(text=f"de {self.page_number_total} pag.")
             self.show_image()
 
-    def pdf_to_img(self,path,name_document):
+    def pdf_to_img(self, path, name_document):
         try:
-            document=fitz.open(path)
-            path_image=[]
+            document = fitz.open(path)
+            path_image = []
+            temp_dir = os.path.join(os.environ["TEMP"],local.project_name,"temp")
+            util_function.generate_folder(temp_dir)
+            if os.path.exists(temp_dir):
+                def process_page(page_number):
+                    page = document.load_page(page_number)
+                    pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))
+                    img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                    image_ubication = os.path.join(temp_dir, f"{name_document}{page_number+1}.png")
+                    img.save(image_ubication)
+                    return image_ubication
 
-            def process_page(page_number):
-                #util_window.modify_bar_msg(self.prog_bar_label, f"please wait... \nGenerating page information. {self.page_number+1}")
-                page=document.load_page(page_number)
-                pix=page.get_pixmap(matrix=fitz.Matrix(2,2))
-                img=Image.frombytes("RGB",[pix.width, pix.height],pix.samples)
-                image_ubication=os.path.join('C:/temp_image', f"{name_document}{page_number+1}.png")
-                img.save(image_ubication)
-                return image_ubication
-            with ThreadPoolExecutor() as executor:
-                futures=[]
-                for page_number in range(len(document)):
-                    futures.append(executor.submit(process_page, page_number))
-                for future in futures:
-                    path_image.append(future.result())
+                with ThreadPoolExecutor() as executor:
+                    futures = [executor.submit(process_page, page_number) for page_number in range(len(document))]
+                    for future in futures:
+                        path_image.append(future.result())
+            else:
+                path_image = [None,"folder cannot be created"]
         except Exception as ex:
-            path_image=[None,ex]
+            path_image = [None, ex]
         finally:
             document.close()
             return path_image
-
+            
     def update_image(self,event=None):
         self.show_image()
 
     def print_pdf(pdf_path, printer_name):
         sumatra_path = r"C:\Users\joule\OneDrive\Desktop\practica\image_viewer\SumatraPDF-3.5.2-64.exe"
         command = [sumatra_path, "-print-to", printer_name, pdf_path]
+        print("1.01.0")
 
         try:
             subprocess.run(command, check=True)
             print("Print job sent successfully.")
         except subprocess.CalledProcessError as e:
             print(f"Error printing file: {e}")
+            print("0.1.0.1")
 
-    pdf_file = r"C:\Users\joule\OneDrive\Desktop\practica\image_viewer\asset\icon\pdf\test_pdf.pdf"
-    printer = "Microsoft print to PDF"
-    print_pdf(pdf_file, printer)
+    #if __name__ == "__main__":
+    #    pdf_file = r"C:\Users\joule\OneDrive\Desktop\practica\image_viewer\asset\icon\pdf\test_pdf.pdf"
+    #    printer = "Microsoft print to PDF"
+    #    print_pdf(pdf_file, printer)
 
     def print_event(self):
         print(self.List_img[0])
