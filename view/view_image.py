@@ -2,21 +2,23 @@ from config import *
 import config as local
 
 class AnotherWindow:
-    def __init__(self, root, path_image=""):
+    def __init__(self, root, path_file=""):
         self.root = root
         util_window.clear_window(self, self.root)
         width, height = 1000, 750
         self.root.maxsize(width, height)
         self.root.geometry(f"{width}x{height-55}-7+0")
         self.load_resources()
+        self.original_path = None
         _status_continue = True
-        if len(path_image) <= 1:
-            if isinstance(path_image[0], str):
-                _name, _extention = os.path.splitext(os.path.basename(path_image[0]))
+        if len(path_file) <= 1:
+            if isinstance(path_file[0], str):
+                _name, _extention = os.path.splitext(os.path.basename(path_file[0]))
                 if _extention == ".pdf":
-                    _sub_list_img = self.pdf_to_img(path_image[0], _name)
+                    self.original_path = path_file[0]
+                    _sub_list_img = self.pdf_to_img(path_file[0], _name)
                     if _sub_list_img[0] is not None:
-                        path_image = _sub_list_img
+                        path_file = _sub_list_img
                     else:
                         _status_continue = False
                         alert = mbox(master=self.root, title="Warning", icon="warning",
@@ -25,7 +27,7 @@ class AnotherWindow:
                             pass
         if _status_continue:
             self.show_visor()
-            self.check_file(path_image)
+            self.check_file(path_file)
         else:
             root.destroy()
 
@@ -80,7 +82,7 @@ class AnotherWindow:
     def pdf_to_img(self, path, name_document):
         try:
             document = fitz.open(path)
-            path_image = []
+            path_file = []
             temp_dir = os.path.join(os.environ["TEMP"],local.project_name,"temp")
             util_function.generate_folder(temp_dir)
             if os.path.exists(temp_dir):
@@ -95,14 +97,14 @@ class AnotherWindow:
                 with ThreadPoolExecutor() as executor:
                     futures = [executor.submit(process_page, page_number) for page_number in range(len(document))]
                     for future in futures:
-                        path_image.append(future.result())
+                        path_file.append(future.result())
             else:
-                path_image = [None,"folder cannot be created"]
+                path_file = [None,"folder cannot be created"]
         except Exception as ex:
-            path_image = [None, ex]
+            path_file = [None, ex]
         finally:
             document.close()
-            return path_image
+            return path_file
             
     def update_image(self,event=None):
         self.show_image()
@@ -119,14 +121,32 @@ class AnotherWindow:
             print(f"Error printing file: {e}")
             print("0.1.0.1")
 
-    #if __name__ == "__main__":
-    #    pdf_file = r"C:\Users\joule\OneDrive\Desktop\practica\image_viewer\asset\icon\pdf\test_pdf.pdf"
-    #    printer = "Microsoft print to PDF"
-    #    print_pdf(pdf_file, printer)
-
     def print_event(self):
-        print(self.List_img[0])
-        os.startfile(self.List_img[0],"print")
+        if self.original_path is None:
+            print(self.List_img[0])
+            os.startfile(self.List_img[0],"print")
+        else:
+            try:
+                print("documento a impirmir")
+                command=[
+                    local.app_path_print,
+                    "-silent",
+                    "-print",
+                    "-print-to",
+                    local.win32print.GetDefaultPrinter(),
+                    self.original_path
+                ]
+                print(local.app_path_print,local.win32print.GetDefaultPrinter(),self.original_path)
+                process=subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                stdout,stderr=process.communicate()
+                if process.returncode!=0:
+                    print("false",stderr.decode())
+                else:
+                    print("True")
+            except Exception as ex:
+                print(f"Error loading the printer: {ex}")
+        #    print(self.original_path)
+        #    os.startfile(self.original_path,"open")
 
     def zoomin(self):
         if self.scale<=self.limit_max_scale:

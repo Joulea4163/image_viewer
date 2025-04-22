@@ -11,13 +11,15 @@ from concurrent.futures import ThreadPoolExecutor
 from PyPDF2 import PdfFileReader,PdfFileWriter,PdfFileMerger
 
 import fitz
+import win32print
 import os,sys
 import tempfile
 import subprocess
 
 project_name="App_View_image"
-project_version="0.9.0.0"
+project_version="0.9.1.0"
 
+app_path_print=os.path.join(".//assets","print","SumatraPDF.exe")
 app_path_temp=""
 app_path_temp_view=""
 app_path_temp_log=""
@@ -43,5 +45,4 @@ _icon_btn_exit=""
 _icon_test_canva=""
 
 
-validated_user = "nose"
 validated_user = "admin"

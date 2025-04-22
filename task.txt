@@ -17,13 +17,13 @@ hecho:
     mejorar la vista de imagenes para que pueda mostrar la imagen en un tamaño determinado. (+0.0.1)
     crear un usuario y contraseña para el login "admin". (+0.0.0.1)
     convertir pdf a imagen con "fitz"(+0.1)
+    generar folders temporales en la carpeta "temp" para guardar imagenes y archivos temporales. (+0.0.1)
 
 en proceso:
-    generar folders temporales en la carpeta "temp" para guardar imagenes y archivos temporales. (+0.0.1)
-    investigar sobre la aplicacion "sumastraPDFPortatil" para poder imprimir documentos desde python. (+0.1)
+    investigar sobre la aplicacion "sumastraPDFPortatil" para poder imprimir documentos desde python. (+0.0.1)
 
 pendiente:
-    tener la capacidad de imprimir un documento "pdf" a la impresora seleccionada.(+0.1)
+    tener la capacidad de imprimir un documento "pdf" a la impresora seleccionada.(+0.0.1)
     tener la capacidad de hacer un reporte.(+0.1)
     convertir de imagen a pdf con "fitz".(+0.0.1)
-    crear una base de datos para cuentas y archivos (+0.1)
+    crear una base de datos para cuentas y reportes.(+0.1)
