@@ -5,7 +5,7 @@ class AnotherWindow:
     def __init__(self, root, path_file=""):
         self.root = root
         util_window.clear_window(self, self.root)
-        width, height = 1000, 750
+        width, height = 1200,800
         self.root.maxsize(width, height)
         self.root.geometry(f"{width}x{height-55}-7+0")
         self.load_resources()
@@ -22,7 +22,7 @@ class AnotherWindow:
                     else:
                         _status_continue = False
                         alert = mbox(master=self.root, title="Warning", icon="warning",
-                                     message=f"{_sub_list_img[1]}", option_1="ok")
+                                    message=f"{_sub_list_img[1]}", option_1="ok")
                         if alert.get() == "ok":
                             pass
         if _status_continue:
@@ -109,14 +109,16 @@ class AnotherWindow:
     def update_image(self,event=None):
         self.show_image()
 
-    def print_pdf(pdf_path, printer_name):
-        sumatra_path = r"C:\Users\joule\OneDrive\Desktop\practica\image_viewer\SumatraPDF-3.5.2-64.exe"
+    def print_pdf(self,pdf_path, printer_name):
+        sumatra_path = r"./asset/print/SumatraPDF.exe"
         command = [sumatra_path, "-print-to", printer_name, pdf_path]
         print("1.01.0")
 
         try:
             subprocess.run(command, check=True)
             print("Print job sent successfully.")
+            alert = mbox(master=self.root, title="Warning", icon="warning",
+            message="Print job sent successfully.", option_1="ok")
         except subprocess.CalledProcessError as e:
             print(f"Error printing file: {e}")
             print("0.1.0.1")
@@ -126,25 +128,7 @@ class AnotherWindow:
             print(self.List_img[0])
             os.startfile(self.List_img[0],"print")
         else:
-            try:
-                print("documento a impirmir")
-                command=[
-                    local.app_path_print,
-                    "-silent",
-                    "-print",
-                    "-print-to",
-                    local.win32print.GetDefaultPrinter(),
-                    self.original_path
-                ]
-                print(local.app_path_print,local.win32print.GetDefaultPrinter(),self.original_path)
-                process=subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-                stdout,stderr=process.communicate()
-                if process.returncode!=0:
-                    print("false",stderr.decode())
-                else:
-                    print("True")
-            except Exception as ex:
-                print(f"Error loading the printer: {ex}")
+             self.print_pdf(self.original_path,local.win32print.GetDefaultPrinter())
         #    print(self.original_path)
         #    os.startfile(self.original_path,"open")
 

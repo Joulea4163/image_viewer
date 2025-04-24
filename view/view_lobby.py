@@ -5,7 +5,7 @@ from view.view_login import ViewLogin
 from tkinter import filedialog
 
 class LobbyView:
-    def __init__(self,root: CTkToplevel|CTk):
+    def __init__(self,root:CTkToplevel|CTk):
         self.root=root
         self.main_root=root
         util_window.clear_window(self,self.root)
@@ -21,9 +21,9 @@ class LobbyView:
 
         bottom_bar=CTkFrame(self.root,fg_color="#256CA9")
         bottom_bar.pack(side=BOTTOM,fill=X)
-        version_label=CTkLabel(bottom_bar,text=f"Version: {project_version}",anchor="w")
+        version_label=CTkLabel(bottom_bar,text=f"Version:{project_version}",anchor="w")
         version_label.pack(side=LEFT,padx=10)
-        user_label=CTkLabel(bottom_bar,text=f"User: {validated_user}",anchor="e")
+        user_label=CTkLabel(bottom_bar,text=f"User:{validated_user}",anchor="e")
         user_label.pack(side=RIGHT,padx=10)
 
         self.container=CTkFrame(self.root,fg_color="transparent",corner_radius=25,width=1500,height=1500)
@@ -36,15 +36,28 @@ class LobbyView:
         archive_options.add_option(image=local._icon_btn_new,option="New",command=self.create_image_view)
         archive_options.add_option(image=local._icon_btn_open,option="Open",command=self.open_images)
         archive_options.add_option(image=local._icon_btn_save,option="Save")
-        archive_options.add_option(image=local._icon_btn_logout,option="Logout",command=lambda: ViewLogin(self.root))
+        archive_options.add_option(image=local._icon_btn_logout,option="Logout",command=self.delayed_logout)
         archive_options.add_option(image=local._icon_btn_exit,option="Exit",command=self.on_close)
+        
+    def delayed_logout(self):
+            try:
+                ViewLogin(self.root)
+            except Exception as e:
+                print(f"Error al ejecutar delayed logout:{e}")
 
     def open_images(self):
         path=filedialog.askopenfilenames(filetypes=local._extensions_list)
-        if not path == []:
+        print("path",path)
+        if not path in ["",[]]:
             new_view=CTkToplevel(self.root)
             AnotherWindow(new_view,path)
-
+        else:
+            _status_continue = False
+            alert = mbox(master=self.root, title="Warning", icon="warning",
+                        message="No files selected for show", option_1="ok")
+            if alert.get() == "ok":
+                pass
+ 
     def create_image_view(self):
         path=filedialog.askopenfilenames(filetypes=local._extensions_list)
         if not path == []:

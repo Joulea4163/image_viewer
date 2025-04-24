@@ -30,6 +30,5 @@ class App(customtkinter.CTk):
     def button_callbck(self):
         print("button clicked")
 
-
 app = App()
 app.mainloop()

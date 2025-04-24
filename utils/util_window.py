@@ -27,7 +27,6 @@ class util_window():
         img=image.resize((width,height))
         icon=local.ImageTk.PhotoImage(img)
         return icon
-            
 
     def clear_window(self,window:local.CTk|local.CTkToplevel|local.CTkFrame):
         for widget in window.winfo_children():

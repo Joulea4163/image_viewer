@@ -96,3 +96,5 @@ class ViewLogin:
             font=("Arial",12),
             width=120
         ).place(x=185,y=75)
+        #self.root.after(10,)
+        self.entry_name.focus_force()
