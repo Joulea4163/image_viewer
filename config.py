@@ -17,7 +17,7 @@ import tempfile
 import subprocess
 
 project_name="App_View_image"
-project_version="0.9.3.0"
+project_version="0.9.4.0"
 
 app_path_print=os.path.join(".//assets","print","SumatraPDF.exe")
 app_path_temp=""
