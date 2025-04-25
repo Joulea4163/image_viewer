@@ -20,10 +20,11 @@ hecho:
     generar folders temporales en la carpeta "temp" para guardar imagenes y archivos temporales. (+0.0.1)
     investigar sobre la aplicacion "sumastraPDFPortatil" para poder imprimir documentos desde python. (+0.0.1)
     tener la capacidad de imprimir un documento "pdf" a la impresora seleccionada.(+0.0.1)
+    convertir imagen a pdf con "fitz".(+0.0.1)
 
 en proceso:
+    crear una base de datos para cuentas y reportes.(+0.1)
 
 pendiente:
     tener la capacidad de hacer un reporte.(+0.1)
-    convertir imagen a pdf con "fitz".(+0.0.1)
-    crear una base de datos para cuentas y reportes.(+0.1)
+    

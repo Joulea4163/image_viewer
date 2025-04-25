@@ -69,10 +69,13 @@ class ViewLogin:
         CTkLabel(self.root,text="User",font=("Arial",12)).place(x=15,y=5)
         self.entry_name=CTkEntry(self.root,textvariable=self.model_user,font=("Arial",12))
         self.entry_name.place(x=110,y=5)
+        self.entry_name.bind("<Return>", lambda event: self.entry_password.focus())
 
         CTkLabel(self.root,text="Password",font=("Arial",12)).place(x=15,y=35)
         self.entry_password=CTkEntry(self.root,textvariable=self.model_password,font=("Arial",12),show="*")
         self.entry_password.place(x=110,y=35)
+        self.entry_password.bind("<Return>",lambda despejar: self.log_in())
+
 
         self.checkbtn_show=CTkCheckBox(self.root,text=" ",command=self.toggle_password_visibility,width=15)
         self.checkbtn_show.place(x=295,y=38)
@@ -86,6 +89,7 @@ class ViewLogin:
             font=("Arial",12),
             width=120
         ).place(x=32,y=75)
+        
 
         CTkButton(
             self.root,
@@ -96,5 +100,8 @@ class ViewLogin:
             font=("Arial",12),
             width=120
         ).place(x=185,y=75)
-        #self.root.after(10,)
-        self.entry_name.focus_force()
+
+
+
+        self.root.after(100,lambda:self.entry_name.focus())
+        
