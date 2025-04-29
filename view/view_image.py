@@ -4,13 +4,19 @@ import config as local
 class AnotherWindow:
     def __init__(self, root, path_file=""):
         self.root = root
+        # Limpia la ventana antes de cargar la nueva
         util_window.clear_window(self, self.root)
-        width, height = 1200,800
+
+        # Establece el tamaño de la ventana
+        width, height = 1200, 800
         self.root.maxsize(width, height)
         self.root.geometry(f"{width}x{height-55}-7+0")
-        self.load_resources()
+
+        self.load_resources()  # Inicializa recursos necesarios
         self.original_path = None
         _status_continue = True
+
+        # Si se pasa una ruta de archivo PDF como lista con un solo elemento
         if len(path_file) <= 1:
             if isinstance(path_file[0], str):
                 _name, _extention = os.path.splitext(os.path.basename(path_file[0]))
@@ -21,69 +27,74 @@ class AnotherWindow:
                         path_file = _sub_list_img
                     else:
                         _status_continue = False
+                        # Muestra una alerta si hay error en la conversión del PDF
                         alert = mbox(master=self.root, title="Warning", icon="warning",
-                                    message=f"{_sub_list_img[1]}", option_1="ok")
+                                     message=f"{_sub_list_img[1]}", option_1="ok")
                         if alert.get() == "ok":
                             pass
+
         if _status_continue:
-            self.show_visor()
-            self.check_file(path_file)
+            self.show_visor()  # Muestra interfaz gráfica
+            self.check_file(path_file)  # Verifica si el archivo es válido y carga imágenes
         else:
             root.destroy()
 
     def load_resources(self):
-        self.List_img=[]
-        self.scale=1.0
-        self.page_number=0  
-        self.page_number_total=0
-        self.model_page_actual=StringVar() 
-        self.limit_max_scale=3.0
-        self.limit_min_scale=0.5
+        # Inicializa variables relacionadas a las imágenes y escalado
+        self.List_img = []
+        self.scale = 1.0
+        self.page_number = 0
+        self.page_number_total = 0
+        self.model_page_actual = StringVar()
+        self.limit_max_scale = 3.0
+        self.limit_min_scale = 0.5
 
     def show_image(self):
-            if not self.List_img==[]:
-                self.model_page_actual.set(f"{self.page_number+1}")
-                ShowImage=self.List_img[self.page_number]
-                if os.path.exists(ShowImage):
-                    try:
-                        self.img=Image.open(ShowImage)
-                        canvas_width=self.Image_container.winfo_width()
-                        canvas_height=self.Image_container.winfo_height()
-                        img_width,img_height=self.img.size
-                        img_width=600 if img_width<100 else img_width
-                        img_height=400 if img_height<100 else img_height
-                        x_offset=(canvas_width-img_width*self.scale)/2
-                        y_offset=(canvas_height-img_height*self.scale)/2
-                        self.img=self.img.resize((int(img_width*self.scale),int(img_height*self.scale)))
-                        self.img=ImageTk.PhotoImage(self.img)
-                        self.Image_container.delete("all")
-                        self.Image_container.create_image(x_offset,y_offset,image=self.img,anchor=NW)
-                        self.Image_container.configure(scrollregion=self.Image_container.bbox("all"))
-                        self.Image_container.update_idletasks()
-                    except Exception as ex:
-                        print(f"Error loading the image: {ex}")
-            else:
-                self.root.destroy
+        # Muestra la imagen actual en el visor
+        if not self.List_img == []:
+            self.model_page_actual.set(f"{self.page_number+1}")
+            ShowImage = self.List_img[self.page_number]
+            if os.path.exists(ShowImage):
+                try:
+                    self.img = Image.open(ShowImage)
+                    canvas_width = self.Image_container.winfo_width()
+                    canvas_height = self.Image_container.winfo_height()
+                    img_width, img_height = self.img.size
+                    img_width = 600 if img_width < 100 else img_width
+                    img_height = 400 if img_height < 100 else img_height
+                    x_offset = (canvas_width - img_width * self.scale) / 2
+                    y_offset = (canvas_height - img_height * self.scale) / 2
+                    self.img = self.img.resize((int(img_width * self.scale), int(img_height * self.scale)))
+                    self.img = ImageTk.PhotoImage(self.img)
+                    self.Image_container.delete("all")
+                    self.Image_container.create_image(x_offset, y_offset, image=self.img, anchor=NW)
+                    self.Image_container.configure(scrollregion=self.Image_container.bbox("all"))
+                    self.Image_container.update_idletasks()
+                except Exception as ex:
+                    print(f"Error loading the image: {ex}")
+        else:
+            self.root.destroy
 
-    def check_file(self,path:str|list|tuple):
-        if isinstance(path,str):
+    def check_file(self, path: str | list | tuple):
+        # Verifica el tipo de archivo y lo procesa
+        if isinstance(path, str):
             if os.path.exists(path):
-                self.List_self.img[0]=path
-                self.page_number_total=len(self.List_self.img)
+                self.List_self.img[0] = path
+                self.page_number_total = len(self.List_self.img)
                 self.label_page_number_total.configure(text=f"de {self.page_number_total} pag.")
                 self.show_image()
-
-        elif isinstance(path,list) or isinstance(path,tuple):
-            self.List_img=[route  for route in path if os.path.exists(route)]
-            self.page_number_total=len(self.List_img)
+        elif isinstance(path, list) or isinstance(path, tuple):
+            self.List_img = [route for route in path if os.path.exists(route)]
+            self.page_number_total = len(self.List_img)
             self.label_page_number_total.configure(text=f"de {self.page_number_total} pag.")
             self.show_image()
 
     def pdf_to_img(self, path, name_document):
+        # Convierte un archivo PDF en imágenes (una por página)
         try:
             document = fitz.open(path)
             path_file = []
-            temp_dir = os.path.join(os.environ["TEMP"],local.project_name,"temp")
+            temp_dir = os.path.join(os.environ["TEMP"], local.project_name, "temp")
             util_function.generate_folder(temp_dir)
             if os.path.exists(temp_dir):
                 def process_page(page_number):
@@ -99,190 +110,166 @@ class AnotherWindow:
                     for future in futures:
                         path_file.append(future.result())
             else:
-                path_file = [None,"folder cannot be created"]
+                path_file = [None, "folder cannot be created"]
         except Exception as ex:
             path_file = [None, ex]
         finally:
             document.close()
             return path_file
-            
-    def update_image(self,event=None):
+
+    def update_image(self, event=None):
+        # Redibuja la imagen cuando se actualiza la ventana
         self.show_image()
 
-    def print_pdf(self,pdf_path, printer_name):
+    def print_pdf(self, pdf_path, printer_name):
+        # Imprime un archivo PDF usando SumatraPDF
         sumatra_path = r"./asset/print/SumatraPDF.exe"
         command = [sumatra_path, "-print-to", printer_name, pdf_path]
         print("1.01.0")
-
         try:
             subprocess.run(command, check=True)
             print("Print job sent successfully.")
             alert = mbox(master=self.root, title="Warning", icon="warning",
-            message="Print job sent successfully.", option_1="ok")
+                         message="Print job sent successfully.", option_1="ok")
         except subprocess.CalledProcessError as e:
             print(f"Error printing file: {e}")
             print("0.1.0.1")
 
     def print_event(self):
+        # Evento para impresión (directa o vía SumatraPDF)
         if self.original_path is None:
             print(self.List_img[0])
-            os.startfile(self.List_img[0],"print")
+            os.startfile(self.List_img[0], "print")
         else:
-             self.print_pdf(self.original_path,local.win32print.GetDefaultPrinter())
-        #    print(self.original_path)
-        #    os.startfile(self.original_path,"open")
+            self.print_pdf(self.original_path, local.win32print.GetDefaultPrinter())
 
     def zoomin(self):
-        if self.scale<=self.limit_max_scale:
-            self.scale=self.scale+0.1
+        # Aumenta el zoom de la imagen
+        if self.scale <= self.limit_max_scale:
+            self.scale += 0.1
             self.show_image()
 
     def zoomout(self):
-        if self.scale>=self.limit_min_scale:
-            self.scale=self.scale-0.1
+        # Disminuye el zoom de la imagen
+        if self.scale >= self.limit_min_scale:
+            self.scale -= 0.1
             self.show_image()
 
-    def Event_Zoom_Mouser(self,event):
+    def Event_Zoom_Mouser(self, event):
+        # Evento de zoom con scroll del mouse + Ctrl
         if event.state & 0x4:
             if event.delta > 0 and self.scale < self.limit_max_scale:
-                self.scale +=0.1
+                self.scale += 0.1
             elif event.delta < 0 and self.scale > self.limit_min_scale:
-                self.scale -=0.1
+                self.scale -= 0.1
             self.show_image()
 
-    def start_pan(self,event):
-        self.canvas.scan_mark(event.x,event.y)
+    def start_pan(self, event):
+        # Marca el inicio del desplazamiento de imagen
+        self.canvas.scan_mark(event.x, event.y)
 
-    def pan_image(self,event):
-        self.canvas.scan_dragto(event.x,event.y,gain=1)
+    def pan_image(self, event):
+        # Desplaza la imagen con el mouse
+        self.canvas.scan_dragto(event.x, event.y, gain=1)
 
-    def x_MouseSheet(self,event):
+    def x_MouseSheet(self, event):
+        # Desplazamiento horizontal con rueda del mouse + Shift
         if event.delta:
-            self.Image_container.xview_scroll(int(-1*(event.delta/120)),"units")
+            self.Image_container.xview_scroll(int(-1 * (event.delta / 120)), "units")
 
-    def y_MouseSheet(self,event):
+    def y_MouseSheet(self, event):
+        # Desplazamiento vertical con rueda del mouse
         if event.delta:
-            self.Image_container.yview_scroll(int(-1*(event.delta/120)),"units")
+            self.Image_container.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
     def next_img(self):
-        if not self.page_number==[0]:
-            self.page_number=(self.page_number+1)% len(self.List_img)
+        # Muestra la siguiente imagen
+        if not self.page_number == [0]:
+            self.page_number = (self.page_number + 1) % len(self.List_img)
             self.show_image()
 
     def last_img(self):
-        if not self.page_number==[0]:
-            self.page_number=(self.page_number-1)% len(self.List_img)
+        # Muestra la imagen anterior
+        if not self.page_number == [0]:
+            self.page_number = (self.page_number - 1) % len(self.List_img)
             self.show_image()
 
-    def set_number_pages(self,event=None):
+    def set_number_pages(self, event=None):
+        # Permite al usuario ir a una página específica
         try:
-            _actual_number=int(self.model_page_actual.get())
-            if _actual_number>self.page_number_total:
+            _actual_number = int(self.model_page_actual.get())
+            if _actual_number > self.page_number_total:
                 mbox(master=self.root,
                      title="Warning",
                      icon="warning",
                      message=f"Page {_actual_number} doesn't exist")
             else:
-                _actual_number=_actual_number-1
-                self.page_number=_actual_number
+                _actual_number -= 1
+                self.page_number = _actual_number
                 self.show_image()
         except Exception as ex:
-            print("Error",str(ex))
+            print("Error", str(ex))
             self.model_page_actual.set("")
 
     def show_visor(self):
-        self.frame_top=CTkFrame(self.root,bg_color="#256CA9",fg_color="#256CA9",corner_radius=0,height=25,border_width=0)
-        self.frame_top.pack(fill="x",side=TOP,pady=(0,0),expand=True)
+        # Crea toda la interfaz gráfica (botones, visores, scrolls)
 
-        CTkButton(
-            master=self.frame_top,
-            image=local._icon_btn_save,
-            command=self.root.destroy,
-            compound="left",
-            text="Save",
-            font=("Arial",12),
-            width=60
-        ).pack(fill="x",side=RIGHT,padx=(0,5))
+        # Parte superior con botones Save y Print
+        self.frame_top = CTkFrame(self.root, bg_color="#256CA9", fg_color="#256CA9", corner_radius=0, height=25, border_width=0)
+        self.frame_top.pack(fill="x", side=TOP, pady=(0,0), expand=True)
 
-        CTkButton(
-            master=self.frame_top,
-            image=local._icon_btn_print,
-            command=self.print_event,
-            compound="right",
-            text="Print",
-            font=("Arial",12),
-            width=60
-        ).pack(fill="x",side=LEFT,padx=(5,0))
-        
-        self.frame_bottom=CTkFrame(self.root,bg_color="#256CA9",border_width=0,fg_color="#256CA9",corner_radius=0,height=25)
-        self.frame_bottom.pack(fill="x",side=BOTTOM,pady=(0,0),expand=True)
+        CTkButton(master=self.frame_top, image=local._icon_btn_save, command=self.root.destroy,
+                  compound="left", text="Save", font=("Arial",12), width=60).pack(fill="x", side=RIGHT, padx=(0,5))
 
-        CTkButton(
-            master=self.frame_bottom,
-            image=local._icon_btn_left,
-            command=self.last_img,
-            text="",
-            font=("Arial",12),
-            width=100
-        ).pack(fill="x",side=LEFT,padx=(10,0),expand=True)
+        CTkButton(master=self.frame_top, image=local._icon_btn_print, command=self.print_event,
+                  compound="right", text="Print", font=("Arial",12), width=60).pack(fill="x", side=LEFT, padx=(5,0))
 
-        CTkButton(
-            master=self.frame_bottom,
-            image=local._icon_btn_right,
-            command=self.next_img,
-            text="",
-            font=("Arial",12),
-            width=100
-        ).pack(fill="x",side=RIGHT,padx=(0,10),expand=True)
+        # Parte inferior con botones de navegación, zoom y entrada de página
+        self.frame_bottom = CTkFrame(self.root, bg_color="#256CA9", border_width=0, fg_color="#256CA9", corner_radius=0, height=25)
+        self.frame_bottom.pack(fill="x", side=BOTTOM, pady=(0,0), expand=True)
 
-        CTkButton(
-            master=self.frame_bottom,
-            image=local._icon_btn_zoomin,
-            command=self.zoomin,
-            text="",
-            font=("Arial",12),
-            width=40
-        ).pack(fill="x",side=RIGHT,padx=(0,5))
+        CTkButton(master=self.frame_bottom, image=local._icon_btn_left, command=self.last_img, text="",
+                  font=("Arial",12), width=100).pack(fill="x", side=LEFT, padx=(10,0), expand=True)
 
-        CTkButton(
-            master=self.frame_bottom,
-            image=local._icon_btn_zoomout,
-            command=self.zoomout,
-            text="",
-            font=("Arial",12),
-            width=40
-        ).pack(fill="x",side=RIGHT,padx=(5,2))
+        CTkButton(master=self.frame_bottom, image=local._icon_btn_right, command=self.next_img, text="",
+                  font=("Arial",12), width=100).pack(fill="x", side=RIGHT, padx=(0,10), expand=True)
 
-        self.label_page_number_total=CTkLabel(self.frame_bottom,
-            text="de 0 pag"
-            )
+        CTkButton(master=self.frame_bottom, image=local._icon_btn_zoomin, command=self.zoomin, text="",
+                  font=("Arial",12), width=40).pack(fill="x", side=RIGHT, padx=(0,5))
 
-        self.label_page_number_total.pack(fill="x",side=RIGHT,padx=(0,10))
-        self.txt_number_page=CTkEntry(self.frame_bottom,
-            width=60,
-            textvariable=self.model_page_actual
-            )
+        CTkButton(master=self.frame_bottom, image=local._icon_btn_zoomout, command=self.zoomout, text="",
+                  font=("Arial",12), width=40).pack(fill="x", side=RIGHT, padx=(5,2))
 
-        self.txt_number_page.pack(fill="x",side=RIGHT,padx=(0,10))
-        self.txt_number_page.bind("<Return>",self.set_number_pages)
+        self.label_page_number_total = CTkLabel(self.frame_bottom, text="de 0 pag")
+        self.label_page_number_total.pack(fill="x", side=RIGHT, padx=(0,10))
 
-        self.Image_container=CTkCanvas(self.root,bd=0,relief="ridge",width=self.root.winfo_screenmmwidth(),height=748)
+        self.txt_number_page = CTkEntry(self.frame_bottom, width=60, textvariable=self.model_page_actual)
+        self.txt_number_page.pack(fill="x", side=RIGHT, padx=(0,10))
+        self.txt_number_page.bind("<Return>", self.set_number_pages)
+
+        # Lienzo para mostrar las imágenes con scrolls
+        self.Image_container = CTkCanvas(self.root, bd=0, relief="ridge",
+                                         width=self.root.winfo_screenmmwidth(), height=748)
         self.Image_container.pack_propagate(0)
-        self.Image_container.pack(fill="both",side=LEFT,expand=True)
-        
-        self.scrolly=CTkScrollbar(self.Image_container,command=self.Image_container.yview,button_hover_color="#256CA9",orientation="vertical")
-        self.scrolly.pack(side="right",fill="y")
-        self.scrollx=CTkScrollbar(self.Image_container,command=self.Image_container.xview,button_hover_color="#256CA9",orientation="horizontal")
-        self.scrollx.pack(side="bottom",fill="x")
+        self.Image_container.pack(fill="both", side=LEFT, expand=True)
+
+        self.scrolly = CTkScrollbar(self.Image_container, command=self.Image_container.yview,
+                                    button_hover_color="#256CA9", orientation="vertical")
+        self.scrolly.pack(side="right", fill="y")
+        self.scrollx = CTkScrollbar(self.Image_container, command=self.Image_container.xview,
+                                    button_hover_color="#256CA9", orientation="horizontal")
+        self.scrollx.pack(side="bottom", fill="x")
 
         self.Image_container.update()
-        self.Image_container.bind("<Left>",self.y_MouseSheet)
-        self.Image_container.bind("<Right>",self.x_MouseSheet)
-        self.Image_container.bind("<Control-Left>",self.last_img)
-        self.Image_container.bind("<Control-Right>",self.next_img)
-        self.Image_container.bind("<Configure>",self.update_image)
-        self.Image_container.bind("<MouseWheel>",self.y_MouseSheet)
+
+        # Enlaza eventos del teclado y mouse
+        self.Image_container.bind("<Left>", self.y_MouseSheet)
+        self.Image_container.bind("<Right>", self.x_MouseSheet)
+        self.Image_container.bind("<Control-Left>", self.last_img)
+        self.Image_container.bind("<Control-Right>", self.next_img)
+        self.Image_container.bind("<Configure>", self.update_image)
+        self.Image_container.bind("<MouseWheel>", self.y_MouseSheet)
         self.Image_container.configure(yscrollcommand=self.scrolly.set)
         self.Image_container.configure(xscrollcommand=self.scrollx.set)
-        self.Image_container.bind("<Shift-MouseWheel>",self.x_MouseSheet)
-        self.Image_container.bind("<Control-MouseWheel>",self.Event_Zoom_Mouser)
+        self.Image_container.bind("<Shift-MouseWheel>", self.x_MouseSheet)
+        self.Image_container.bind("<Control-MouseWheel>", self.Event_Zoom_Mouser)
