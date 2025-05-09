@@ -5,7 +5,7 @@ from view.view_login import ViewLogin
 from tkinter import filedialog
 
 class LobbyView:
-    def init(self, root: CTkToplevel | CTk):
+    def __init__(self, root: CTkToplevel | CTk):  # Aquí cambiamos 'init' a '__init__'
         self.root = root
         self.main_root = root
         util_window.clear_window(self, self.root)
@@ -16,7 +16,7 @@ class LobbyView:
     def setup_lobby(self):
         self.root.geometry("750x500")
         frame_top = CTkMenuBar(self.root, bg_color="#256CA9", height=25)
-        frame_top.pack(fill="x")\
+        frame_top.pack(fill="x")
 
         bottom_bar = CTkFrame(self.root, fg_color="#256CA9")
         bottom_bar.pack(side=BOTTOM, fill=X)
